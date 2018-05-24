@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>p5jsTemplate</title>
+    <!-- Bootstrap and P5js Libraries-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <script src="js/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/addons/p5.dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/addons/p5.sound.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6 text-center fixed-top" id="sketch-holder"></div>
+        <!-- Our Sketch will go here -->
+      <div class="col-md-6">
+        <!-- Place holder to hold the title, description and code to the right 1/2 -->
+      </div>
+      <div class="col-md-6">
+        <!-- Use find and Replace to replace p5jsTemplate with the title of the Lab-->
+        <h1>Spot's Journey</h1>
+        <!-- Add a date, period and description of the lab -->
+        <h4>Kate Johnson and Elizabeth Hillman</h4>
+        <p>Date: 5/25/2018</p>
+        <p>Period: 3</p>
+        <p>Description: Help Spot find his owner! Navigate across the road by avoiding the cars and get across the river by jumping on the logs.</p>
+        <p><a href="https://p5js.org/reference" target="_blank">p5js Reference Material</a></p>
+        <br>
+
+        <!-- Explain the CS concepts used-->
+        <h4>Programming Concepts</h4>
+        <p>We used variables, booleans, conditionals, loops and utilized class systems to create objects.</p>
+
+        <br>
+        <!-- Our Code will go here -->
+        <div id="code">
+        <figure>
+          <figcaption>The Code for game.js</figcaption>
+            <pre>
+              <code class="pretty-printed">
+                <!-- Paste your completed code here -->
+                var Game = function() {
+    //calls levels
+	this.pages = [
+		new IntroPage(),
+		new Level1(),
+		new Level2(),
+        new Level3(),
+        new Level4(),
+		new WinnerPage(),
+		new LoserPage()
+	];
+    
+    //variable to set whether debug mode is on or off
+	this.debug = false;
+    
+    //creates/calls the player object
+	this.player = new Player();
+	
+};
+
+//determine what the current page is
+Game.prototype.currentPage = function() {
+	return this.pages[this.currentPageIndex];
+}
+
+
+//switches to a different page or level
+Game.prototype.switchPage = function(pageIndex){
+	this.currentPageIndex=pageIndex;
+	this.currentPage().reset(this.player);
+};
+
+//updates next level and calls switchLevel function
+Game.prototype.advancePage = function(){
+	sounds.playNextLevel();
+	nextLevelIndex = this.currentPageIndex+1;
+	if (nextLevelIndex >= this.pages.length){
+		nextLevelIndex = 0;
+	}
+	this.switchPage(nextLevelIndex);
+};
+
+//Draws stuff!
+Game.prototype.draw = function(canvas) {
+	this.currentPage().draw(canvas, this.player);
+    
+    //debug mode stops movement of obstacles but allows player to still move
+	fill(0,0,0);
+	textSize(20);
+	if (this.debug) {
+		text("DEBUG-MODE", 240, 20);
+	}
+};
+
+//manually stops and starts movement
+Game.prototype.keyPressed = function(keyCode) {
+	//toggles debug mode
+	if (keyCode === 68) {
+		this.debug = !this.debug;
+	}
+    //allows player to move
+	if (this.currentPage().isRunning() || this.debug) {
+        this.player.keyPressed(keyCode,this.currentPage());
+	}
+	this.currentPage().keyPressed(keyCode);
+};
+
+
+
+//resets entire game to level one
+Game.prototype.reset = function(){
+	this.player.resetLives(3);
+	this.switchPage(0);
+};
+
+//activates lose page
+Game.prototype.gameLost = function(){
+	// load the game over page
+	this.switchPage(this.pages.length - 1);
+};
+
+              </code>
+            </pre>
+        </figure>
+
+      </div>
+    </div>
+
+
+      </div>
+
+    
+    <script  src="js/game.js"></script>
+	<script  src="js/player.js"></script>
+    <script  src="js/obstacle.js"></script>
+    <script  src="js/sounds.js"></script>
+    <script  src="js/lanes.js"></script>
+	<script src="js/page.js"></script>
+    <script  src="js/levels.js"></script>
+    <script  src="js/index.js"></script>
+
+  </div>
+</body>
+
+</html>
